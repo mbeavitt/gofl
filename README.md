@@ -4,7 +4,9 @@ This is a simple implementation of Conway's "The Game of Life" in the C programm
 It is written for installation and execution on mac os operating systems.
 It uses Raylib for graphics.
 
-Installation:
+If you're using a mac, you can just run the app in the _MAC directory.
+
+Installation from source:
 
 1)
 `git clone https://github.com/mbeavitt/gofl/`
