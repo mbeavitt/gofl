@@ -6,7 +6,6 @@
 
 #define PADDING 2
 #define CUBESIZE 10
-#define NAVBAR_OFFSET 5
 #define BLANK_CHAR ' '
 
 //------------------------------------------------------------------------------------
@@ -20,11 +19,12 @@ void game_step(int num_rows, int num_cols, char board[num_rows][num_cols], char 
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) {
-    const int screenWidth = 1440;
-    const int screenHeight = 900;
-    int num_rows = screenWidth / (CUBESIZE);
-    int num_cols = -NAVBAR_OFFSET + screenHeight / (CUBESIZE);
+    const int screenWidth = 700;
+    const int screenHeight = 700;
+    int num_rows = 4000 / (CUBESIZE);
+    int num_cols = 4000 / (CUBESIZE);
     char board[num_rows][num_cols];
+    bool pause = false;
 
     srand((unsigned) time(NULL));
 
@@ -36,6 +36,30 @@ int main(void) {
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        // check for alt + enter
+        if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)))
+        {
+            // see what display we are on right now
+            int display = GetCurrentMonitor();
+
+
+            if (IsWindowFullscreen())
+            {
+                // if we are full screen, then go back to the windowed size
+                SetWindowSize(screenWidth, screenHeight);
+            }
+            else
+            {
+                // if we are not full screen, set the window size to match the monitor we are on
+                SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+            }
+
+            // toggle the state
+            ToggleFullscreen();
+        }
+
+        // choose to pause the animation
+        if (IsKeyPressed(KEY_SPACE)) pause = !pause;
 
         // Draw
         BeginDrawing();
