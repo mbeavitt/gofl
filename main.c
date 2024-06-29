@@ -26,7 +26,7 @@ int main(void) {
     int num_cols = 4000 / (CUBESIZE);
     char board[num_rows][num_cols];
     bool pause = false;
-    int counter = 12;
+    int counter = 0;
 
     srand((unsigned) time(NULL));
 
@@ -39,8 +39,8 @@ int main(void) {
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         if (IsKeyPressed(KEY_R)) initialise_random(num_rows, num_cols, board, 'o');
-        if (IsKeyPressed(333) && draw_rate != 24) draw_rate++; 
-        if (IsKeyPressed(334) && draw_rate != 1) draw_rate--;
+        if (IsKeyPressed(KEY_DOWN) && draw_rate != 24) draw_rate++; printf("%d\n", draw_rate); 
+        if (IsKeyPressed(KEY_UP) && draw_rate != 1) draw_rate--; printf("%d\n", draw_rate);
         // check for alt + enter
         if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)))
         {
@@ -72,8 +72,12 @@ int main(void) {
             ClearBackground(BLACK);
             // draw board from 'board' variable
             print_board(num_rows, num_cols, board);
+
+            // separate game steps from fps
             if (counter == draw_rate) {
                 if (!pause) game_step(num_rows, num_cols, board, 'o');
+                counter = 0;
+            } else if (counter >= 24) {
                 counter = 0;
             } else {
                 counter++;
