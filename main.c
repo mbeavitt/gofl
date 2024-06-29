@@ -21,21 +21,26 @@ void game_step(int num_rows, int num_cols, char board[num_rows][num_cols], char 
 int main(void) {
     const int screenWidth = 700;
     const int screenHeight = 700;
+    int draw_rate = 12;
     int num_rows = 4000 / (CUBESIZE);
     int num_cols = 4000 / (CUBESIZE);
     char board[num_rows][num_cols];
     bool pause = false;
+    int counter = 12;
 
     srand((unsigned) time(NULL));
 
     InitWindow(screenWidth, screenHeight, "The Game of Life");
     initialise_random(num_rows, num_cols, board, 'o');
 
-    SetTargetFPS(10);               // Set our game to run at 10 frames-per-second
+    SetTargetFPS(120);               // Set our game to run at 120 frames-per-second
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        if (IsKeyPressed(KEY_R)) initialise_random(num_rows, num_cols, board, 'o');
+        if (IsKeyPressed(333) && draw_rate != 24) draw_rate++; 
+        if (IsKeyPressed(334) && draw_rate != 1) draw_rate--;
         // check for alt + enter
         if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)))
         {
@@ -59,7 +64,7 @@ int main(void) {
         }
 
         // choose to pause the animation
-        if (IsKeyPressed(KEY_SPACE)) pause = !pause;
+        if (GetKeyPressed() == 32) pause = !pause;
 
         // Draw
         BeginDrawing();
@@ -67,7 +72,12 @@ int main(void) {
             ClearBackground(BLACK);
             // draw board from 'board' variable
             print_board(num_rows, num_cols, board);
-            game_step(num_rows, num_cols, board, 'o');
+            if (counter == draw_rate) {
+                if (!pause) game_step(num_rows, num_cols, board, 'o');
+                counter = 0;
+            } else {
+                counter++;
+            }
 
         EndDrawing();
     }
@@ -101,7 +111,7 @@ void print_board(int num_rows, int num_cols, char board[num_rows][num_cols]) {
                              j * CUBESIZE,
                              CUBESIZE - PADDING,
                              CUBESIZE - PADDING,
-                             WHITE);
+                             PINK);
             }
         } 
     }
