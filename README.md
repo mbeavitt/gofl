@@ -16,7 +16,8 @@ Controls:
 
 ![the game running](https://github.com/mbeavitt/gofl/blob/main/assets/game_running.png?raw=true)
 
-If you're using a mac, you can just run the app in the _MAC directory.
+Currently installation is only supported on apple silicon macs. Prebuilt executables will be added
+to the app directory at a later date.
 
 Installation from source:
 
@@ -24,4 +25,4 @@ Installation from source:
 `git clone https://github.com/mbeavitt/gofl/`
 
 2)
-`clang -framework IOKit -framework Cocoa libraylib.a main.c -o main`
+`clang -framework IOKit -framework Cocoa -I./src ./src/libraylib.a main.c -o main`
