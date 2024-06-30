@@ -31,7 +31,7 @@ int main(void) {
     bool pause = false;
     int counter = 0;
     int colour_choice = 0;
-    Color draw_colour = (Color) {255, 255, 255, 255};
+    Color draw_colour = WHITE;
 
     srand((unsigned) time(NULL));
 
