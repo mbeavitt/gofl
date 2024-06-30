@@ -9,7 +9,7 @@ Controls:
 - r: randomise
 - b: blank (clear the screen)
 - up/down arrow: speed up/slow down the evolution rate, respectively
-- - and = keys: zoom out/in, respectively
+- \- and = keys: zoom out/in, respectively
 - spacebar: pause the simulation
 - left mouse click: draw new cells
 - alt + enter: fullscreen mode (warning, weird behaviour if you alt-tab to another window.)
