@@ -13,6 +13,7 @@ Controls:
 - spacebar: pause the simulation
 - left mouse click: draw new cells
 - alt + enter: fullscreen mode (warning, weird behaviour if you alt-tab to another window.)
+- ESC: exit
 
 ![the game running](https://github.com/mbeavitt/gofl/blob/main/assets/game_running.png?raw=true)
 
