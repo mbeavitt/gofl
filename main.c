@@ -10,11 +10,12 @@
 //------------------------------------------------------------------------------------
 // Global variables
 //------------------------------------------------------------------------------------
-
+static Vector2 *SelectedCube = NULL;
 //------------------------------------------------------------------------------------
 // Function prototypes
 //------------------------------------------------------------------------------------
-void initialise_random(int num_rows, int num_cols, bool board[num_rows][num_cols]);
+void ranzomise_board(int num_rows, int num_cols, bool board[num_rows][num_cols]);
+void clear_board(int num_rows, int num_cols, bool board[num_rows][num_cols]);
 void print_board(int num_rows, int num_cols, bool board[num_rows][num_cols], Color draw_colour);
 void game_step(int num_rows, int num_cols, bool board[num_rows][num_cols]);
 
@@ -28,7 +29,7 @@ int main(void) {
     int num_rows = 4000 / (CUBESIZE);
     int num_cols = 4000 / (CUBESIZE);
     bool board[num_rows][num_cols];
-    bool pause = false;
+    bool pause = true;
     int counter = 0;
     int colour_choice = 0;
     Color draw_colour = WHITE;
@@ -36,14 +37,15 @@ int main(void) {
     srand((unsigned) time(NULL));
 
     InitWindow(screenWidth, screenHeight, "The Game of Life");
-    initialise_random(num_rows, num_cols, board);
 
     SetTargetFPS(120);               // Set our game to run at 120 frames-per-second
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        if (IsKeyPressed(KEY_R)) initialise_random(num_rows, num_cols, board);
+        Vector2 mouse = GetMousePosition();
+        if (IsKeyPressed(KEY_R)) ranzomise_board(num_rows, num_cols, board);
+        if (IsKeyPressed(KEY_B)) clear_board(num_rows, num_cols, board);
         if (IsKeyPressed(KEY_DOWN) && draw_rate != 24) {
             draw_rate++;
         } 
@@ -86,6 +88,11 @@ int main(void) {
             ToggleFullscreen();
         }
 
+        // check for user mouse input
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            board[((int)mouse.x) / CUBESIZE][((int)mouse.y) / CUBESIZE] = 1;
+        }
+
         // choose to pause the animation
         if (GetKeyPressed() == 32) pause = !pause;
 
@@ -103,6 +110,7 @@ int main(void) {
             } else {
                 counter++;
             }
+            DrawText(TextFormat("Mouse position: [%i , %i]", (int)mouse.x, (int)mouse.y), 350, 25, 20, WHITE);
 
         EndDrawing();
     }
@@ -116,7 +124,7 @@ int main(void) {
 //------------------------------------------------------------------------------------
 // Function definitions 
 //------------------------------------------------------------------------------------
-void initialise_random(int num_rows, int num_cols, bool board[num_rows][num_cols]) {
+void ranzomise_board(int num_rows, int num_cols, bool board[num_rows][num_cols]) {
     for (int i = 0; i < num_rows; i++) {
         for (int j = 0; j < num_cols; j++) {
             if ((rand() % 5) == 0) {
@@ -124,6 +132,14 @@ void initialise_random(int num_rows, int num_cols, bool board[num_rows][num_cols
             } else {
                 board[i][j] = 0;
             }
+        }
+    }
+}
+
+void clear_board(int num_rows, int num_cols, bool board[num_rows][num_cols]) {
+    for (int i = 0; i < num_rows; i++) {
+        for (int j = 0; j < num_cols; j++) {
+            board[i][j] = 0;
         }
     }
 }
