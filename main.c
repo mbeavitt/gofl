@@ -5,12 +5,14 @@
 #include <unistd.h>
 
 #define PADDING 2
-#define CUBESIZE 10
 
 //------------------------------------------------------------------------------------
 // Global variables
 //------------------------------------------------------------------------------------
 static Vector2 *SelectedCube = NULL;
+const int screenWidth = 700;
+const int screenHeight = 700;
+int cubesize = 10;
 //------------------------------------------------------------------------------------
 // Function prototypes
 //------------------------------------------------------------------------------------
@@ -18,22 +20,23 @@ void ranzomise_board(int num_rows, int num_cols, bool board[num_rows][num_cols])
 void clear_board(int num_rows, int num_cols, bool board[num_rows][num_cols]);
 void print_board(int num_rows, int num_cols, bool board[num_rows][num_cols], Color draw_colour);
 void game_step(int num_rows, int num_cols, bool board[num_rows][num_cols]);
+void check_fullscreen(void);
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void) {
-    const int screenWidth = 700;
-    const int screenHeight = 700;
     int draw_rate = 12;
-    int num_rows = 4000 / (CUBESIZE);
-    int num_cols = 4000 / (CUBESIZE);
+    // TODO: dynamically change game state matrix based on current window size
+    int num_rows = 4000 / (cubesize); 
+    int num_cols = 4000 / (cubesize);
     bool board[num_rows][num_cols];
     bool pause = true;
     int counter = 0;
     int colour_choice = 0;
     Color draw_colour = WHITE;
 
+    clear_board(num_rows, num_cols, board);
     srand((unsigned) time(NULL));
 
     InitWindow(screenWidth, screenHeight, "The Game of Life");
@@ -55,6 +58,12 @@ int main(void) {
                 counter--;
             }
         }
+        if (IsKeyPressed(KEY_MINUS) && cubesize > 4) {
+            cubesize--;
+        }
+        if (IsKeyPressed(KEY_EQUAL) && cubesize < 20) {
+            cubesize++;
+        };
 
         if (IsKeyPressed(KEY_ONE)) draw_colour = RED;
         if (IsKeyPressed(KEY_TWO)) draw_colour = BLUE; 
@@ -66,31 +75,11 @@ int main(void) {
         if (IsKeyPressed(KEY_EIGHT)) draw_colour = WHITE;
         if (IsKeyPressed(KEY_NINE)) draw_colour = LIGHTGRAY;
         
-        // check for alt + enter
-        if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)))
-        {
-            // see what display we are on right now
-            int display = GetCurrentMonitor();
-
-
-            if (IsWindowFullscreen())
-            {
-                // if we are full screen, then go back to the windowed size
-                SetWindowSize(screenWidth, screenHeight);
-            }
-            else
-            {
-                // if we are not full screen, set the window size to match the monitor we are on
-                SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
-            }
-
-            // toggle the state
-            ToggleFullscreen();
-        }
+        check_fullscreen();
 
         // check for user mouse input
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            board[((int)mouse.x) / CUBESIZE][((int)mouse.y) / CUBESIZE] = 1;
+            board[((int)mouse.x) / cubesize][((int)mouse.y) / cubesize] = 1;
         }
 
         // choose to pause the animation
@@ -110,7 +99,8 @@ int main(void) {
             } else {
                 counter++;
             }
-            DrawText(TextFormat("Mouse position: [%i , %i]", (int)mouse.x, (int)mouse.y), 350, 25, 20, WHITE);
+            // mouse position debug log
+            //DrawText(TextFormat("Mouse position: [%i , %i]", (int)mouse.x, (int)mouse.y), 350, 25, 20, WHITE);
 
         EndDrawing();
     }
@@ -148,10 +138,10 @@ void print_board(int num_rows, int num_cols, bool board[num_rows][num_cols], Col
     for (int i = 0; i < num_rows; i++) {
         for (int j = 0; j < num_cols; j++) {
             if (board[i][j] == 1) {
-                DrawRectangle(i * CUBESIZE,
-                             j * CUBESIZE,
-                             CUBESIZE - PADDING,
-                             CUBESIZE - PADDING,
+                DrawRectangle(i * cubesize,
+                             j * cubesize,
+                             cubesize - PADDING,
+                             cubesize - PADDING,
                              draw_colour);
             }
         } 
@@ -190,5 +180,22 @@ void game_step(int num_rows, int num_cols, bool board[num_rows][num_cols]) {
                 case 8: board[i][j] = 0; break;
             }
         }
+    }
+}
+
+void check_fullscreen(void) {
+    // check for alt + enter
+    if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT))) {
+        // see what display we are on right now
+        int display = GetCurrentMonitor();
+        if (IsWindowFullscreen()) {
+            // if we are full screen, then go back to the windowed size
+            SetWindowSize(screenWidth, screenHeight);
+        }
+        else {
+            // if we are not full screen, set the window size to match the monitor we are on
+            SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+        }
+        ToggleFullscreen();
     }
 }
