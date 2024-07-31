@@ -17,13 +17,9 @@ Controls:
 
 ![the game running](https://github.com/mbeavitt/gofl/blob/main/assets/game_running.png?raw=true)
 
-Currently installation is only supported on apple silicon macs. Prebuilt executables will be added
-to the app directory at a later date.
 
 Installation from source:
 
 1)
-`git clone https://github.com/mbeavitt/gofl/`
-
-2)
-`clang -framework IOKit -framework Cocoa -I./src ./src/libraylib.a main.c -o main`
+`git clone https://github.com/mbeavitt/gofl`
+`cd gofl && make`
