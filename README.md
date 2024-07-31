@@ -20,6 +20,5 @@ Controls:
 
 Installation from source:
 
-1)
-`git clone https://github.com/mbeavitt/gofl`
-`cd gofl && make`
+-`git clone https://github.com/mbeavitt/gofl`
+-`cd gofl && make`
