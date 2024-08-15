@@ -18,7 +18,7 @@ Controls:
 ![the game running](https://github.com/mbeavitt/gofl/blob/main/assets/game_running.png?raw=true)
 
 
-Installation from source:
+Installation from source (Requires X11-dev and libgl-dev):
 
 `git clone https://github.com/mbeavitt/gofl`
 
