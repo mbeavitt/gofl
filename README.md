@@ -1,7 +1,7 @@
 ## The Game of Life
 
 This is a simple implementation of Conway's "The Game of Life" in the C programming language.
-It is written for installation and execution on mac os operating systems.
+It is written for installation and execution on unix.
 It uses Raylib for graphics.
 
 Controls:
